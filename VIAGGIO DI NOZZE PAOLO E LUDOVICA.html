@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Viaggio di nozze - Paolo e Ludovica</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+      color: #333;
+    }
+
+    header {
+      background: #004e92;
+      background: linear-gradient(to right, #000428, #004e92);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header h2 {
+      font-weight: 300;
+      font-size: 1.3rem;
+    }
+
+    .description {
+      max-width: 800px;
+      margin: 2rem auto;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin: 3rem 0 1rem;
+      font-size: 1.8rem;
+      color: #004e92;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 1rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 10px rgba(0,0,0,0.2);
+    }
+
+    .popup-content h3 {
+      margin-top: 0;
+    }
+
+    .popup-content p {
+      margin: 0.5rem 0;
+    }
+
+    .close-btn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #004e92;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      margin: 3rem 0 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Viaggio di nozze: New York e Miami</h1>
+    <h2>Dicembre 2025 - Gennaio 2026</h2>
+  </header>
+
+  <div class="description">
+    <p>Per il nostro matrimonio non abbiamo pensato a una lista nozze ma... abbiamo prenotato un volo A/R per gli States! </p>
+    <p>In questo sito troverai alcune delle attività che ci piacerebbe svolgere. Se vuoi, puoi contribuire ad arricchire la nostra esperienza regalandoci simbolicamente una di queste.</p>
+    <p>(clicca sull'attività che preferisci)</p>
+  </div>
+
+  <h3 class="section-title">🌆 Prima Parte: New York</h3>
+  <div class="grid" id="ny-section"></div>
+
+  <h3 class="section-title">🌴 Seconda Parte: Miami</h3>
+  <div class="grid" id="miami-section"></div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popup-content">
+      <h3 id="popup-title"></h3>
+      <p><strong>Destinatario:</strong> PAOLO MUCCIANTE</p>
+      <p><strong>IBAN:</strong> IT71R0306922800100000074295</p>
+      <p id="popup-causale"></p>
+      <button class="close-btn" onclick="closePopup()">Chiudi</button>
+    </div>
+  </div>
+
+  <footer>
+    Paolo & Ludovica • Viaggio di nozze 2025
+  </footer>
+
+  <script>
+    const nyActivities = [
+      "BnB a Manhattan",
+      "Top of the Rock - Visita spettacolare su Manhattan e sull'Empire State Building",
+      "Statua della Libertà + Ellis Island - Traghetto e visita al museo dell'immigrazione",
+      "Edge Hudson Yards - Visita alla terrazza sospesa nel vuoto con pavimento in vetro",
+      "Spettacolo a Broadway",
+      "MoMa - Visita al Museo d'Arte Moderna",
+      "Cena di Natale con vista sull'Hudson",
+      "Dyker Heights Christmas Light Tour a Brooklyn - Tour in bus tra le case più decorate della città",
+      "Spray al peperoncino - da tenere sempre con noi per evitare aggressioni"
+    ];
+
+    const miamiActivities = [
+      "BnB a Miami Beach",
+      "Gita giornaliera alle Everglades - una giornata nella natura in compagnia degli alligatori",
+      "Capodanno - Festa in barca nella baia di Biscayne",
+      "Little Havana - Tour guidato, cultura cubana + degustazioni",
+      "Museo Pérez - Visita alla Baia e arte contemporanea",
+      "Ristorante con vista - Baia Beach Club, cena con atmosfera boho-chic",
+      "Fondo aperitivi",
+      "Vestiti vintage - per swaggare sulle spiagge",
+      "Crema solare - perché il sole è anche nostro nemico"
+    ];
+
+    const nyContainer = document.getElementById("ny-section");
+    const miamiContainer = document.getElementById("miami-section");
+    const popup = document.getElementById("popup");
+    const popupTitle = document.getElementById("popup-title");
+    const popupCausale = document.getElementById("popup-causale");
+
+    function createCards(activities, container, prefix) {
+      activities.forEach((title, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerText = title;
+        card.onclick = () => {
+          popup.style.display = "flex";
+          popupTitle.innerText = title;
+          popupCausale.innerText = "Causale: matrimonio Paolo e Ludovica - " + title;
+        };
+        container.appendChild(card);
+      });
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+    }
+
+    createCards(nyActivities, nyContainer);
+    createCards(miamiActivities, miamiContainer);
+  </script>
+
+</body>
+</html>
