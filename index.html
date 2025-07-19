@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Viaggio di nozze - Paolo e Ludovica</title>
+
+  <!-- Font Awesome per le icone -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
     body {
       font-family: 'Helvetica Neue', sans-serif;
@@ -93,6 +99,10 @@
       margin: 0.5rem 0;
     }
 
+    .popup-content i {
+      color: #004e92;
+    }
+
     .close-btn {
       margin-top: 1rem;
       padding: 0.5rem 1rem;
@@ -119,7 +129,7 @@
   </header>
 
   <div class="description">
-    <p>Per il nostro matrimonio non abbiamo pensato a una lista nozze ma... abbiamo prenotato un volo A/R per gli States! </p>
+    <p>Per il nostro matrimonio non abbiamo pensato a una lista nozze ma... abbiamo prenotato un volo A/R per gli States!</p>
     <p>In questo sito troverai alcune delle attività che ci piacerebbe svolgere. Se vuoi, puoi contribuire ad arricchire la nostra esperienza regalandoci simbolicamente una di queste.</p>
     <p>(clicca sull'attività che preferisci)</p>
   </div>
@@ -169,20 +179,44 @@
       "Crema solare - perché il sole è anche nostro nemico"
     ];
 
+    const activityIcons = {
+      "BnB a Manhattan": "fa-solid fa-bed",
+      "Top of the Rock": "fa-solid fa-building",
+      "Statua della Libertà": "fa-solid fa-torii-gate",
+      "Edge Hudson Yards": "fa-solid fa-city",
+      "Spettacolo a Broadway": "fa-solid fa-masks-theater",
+      "MoMa": "fa-solid fa-palette",
+      "Cena di Natale": "fa-solid fa-utensils",
+      "Dyker Heights": "fa-solid fa-tree",
+      "Spray al peperoncino": "fa-solid fa-shield-halved",
+      "BnB a Miami Beach": "fa-solid fa-umbrella-beach",
+      "Gita giornaliera alle Everglades": "fa-solid fa-hippo",
+      "Capodanno": "fa-solid fa-champagne-glasses",
+      "Little Havana": "fa-solid fa-music",
+      "Museo Pérez": "fa-solid fa-landmark",
+      "Ristorante con vista": "fa-solid fa-wine-glass",
+      "Fondo aperitivi": "fa-solid fa-martini-glass-citrus",
+      "Vestiti vintage": "fa-solid fa-shirt",
+      "Crema solare": "fa-solid fa-sun"
+    };
+
     const nyContainer = document.getElementById("ny-section");
     const miamiContainer = document.getElementById("miami-section");
     const popup = document.getElementById("popup");
     const popupTitle = document.getElementById("popup-title");
     const popupCausale = document.getElementById("popup-causale");
 
-    function createCards(activities, container, prefix) {
-      activities.forEach((title, i) => {
+    function createCards(activities, container) {
+      activities.forEach((title) => {
         const card = document.createElement("div");
         card.className = "card";
         card.innerText = title;
         card.onclick = () => {
           popup.style.display = "flex";
-          popupTitle.innerText = title;
+          const iconClass = Object.entries(activityIcons).find(([key]) =>
+            title.includes(key)
+          )?.[1] || "fa-solid fa-star";
+          popupTitle.innerHTML = `<i class="${iconClass}" style="margin-right: 8px;"></i> ${title}`;
           popupCausale.innerText = "Causale: matrimonio Paolo e Ludovica - " + title;
         };
         container.appendChild(card);
